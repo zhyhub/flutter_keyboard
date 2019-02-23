@@ -112,7 +112,6 @@ class _PlateNumberKeyboardState extends State<PlateNumberKeyboard>
   KeyboardType _keyboardType;
 
   void addResult() {
-    print('addResult   $_results}');
     if (_results.length < 8) {
       widget.backResult(_results);
     }
@@ -198,7 +197,6 @@ class _PlateNumberKeyboardState extends State<PlateNumberKeyboard>
           borderRadius: BorderRadius.all(Radius.circular(6.0)),
         ),
         onPressed: () {
-          print('_PlateNumberKeyboardState $v ');
           _results.add(v);
           addResult();
           setState(() {
@@ -224,7 +222,6 @@ class _PlateNumberKeyboardState extends State<PlateNumberKeyboard>
         ),
         onPressed: () {
           _results.remove(_results.last);
-          print('_PlateNumberKeyboardState ${_results.toString()} ');
           if (_results.length == 0) {
             setState(() {
               areaTextList.clear();
@@ -265,7 +262,6 @@ class _PlateNumberKeyboardState extends State<PlateNumberKeyboard>
                 borderRadius: BorderRadius.all(Radius.circular(6.0)),
               ),
               onPressed: () {
-                print('_PlateNumberKeyboardState $v ');
                 if (_results.length < 7) {
                   _results.add(v);
                 }

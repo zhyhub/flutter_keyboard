@@ -4,11 +4,4 @@
 
 ### 优化PlateNumberKeyboard内部结构，方便调用。
 
-### Use
-
-#### showBottomSheet(
-#### context: context,
-#### builder: (_) {
-#### return PlateNumberKeyboard(
-#### backResult: (val) => onDataChange(val),
-#### results: resultList,); });
+### 具体使用方法看main.dart
