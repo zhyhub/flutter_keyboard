@@ -86,17 +86,16 @@ const List<String> numberList = [
 final List<Widget> areaTextList = <Widget>[];
 final List<Widget> numberTextList = <Widget>[];
 
-// ignore: must_be_immutable
 class PlateNumberKeyboard extends StatefulWidget {
   PlateNumberKeyboard({
     Key key,
-    this.keyboardType = KeyboardType.area,
-    this.callback,
+    @required this.results,
+    this.backResult,
   }) : super(key: key);
 
-  KeyboardType keyboardType;
+  final List<String> results;
 
-  final callback;
+  final backResult;
 
   @override
   _PlateNumberKeyboardState createState() => _PlateNumberKeyboardState();
@@ -104,12 +103,18 @@ class PlateNumberKeyboard extends StatefulWidget {
 
 class _PlateNumberKeyboardState extends State<PlateNumberKeyboard>
     with SingleTickerProviderStateMixin {
-  List<String> results = List();
+  double _baseWidth;
+  double _baseHeight;
+  double _deleteWidth;
+  double _deleteHeight;
+
+  List<String> _results;
+  KeyboardType _keyboardType;
 
   void addResult() {
-    print('addResult   $results');
-    if (results.length < 8) {
-      widget.callback(results);
+    print('addResult   $_results}');
+    if (_results.length < 8) {
+      widget.backResult(_results);
     }
   }
 
@@ -118,6 +123,8 @@ class _PlateNumberKeyboardState extends State<PlateNumberKeyboard>
     super.initState();
     areaTextList.clear();
     numberTextList.clear();
+    _results = widget.results;
+    _keyboardType = KeyboardType.area;
   }
 
   @override
@@ -135,51 +142,7 @@ class _PlateNumberKeyboardState extends State<PlateNumberKeyboard>
   _getAreaKeyboard() {
     areaList.asMap().forEach((k, v) {
       return areaTextList.add(
-//        k == areaList.length - 1
-//            ? Container(
-//                width: MediaQuery.of(context).size.width / 6,
-//                height: MediaQuery.of(context).size.width / 9,
-//                margin: const EdgeInsets.only(top: 5),
-//                child: RaisedButton(
-//                  padding: const EdgeInsets.all(5),
-//                  child: Icon(Icons.delete_forever),
-//                  shape: RoundedRectangleBorder(
-//                    borderRadius: BorderRadius.all(Radius.circular(6.0)),
-//                  ),
-//                  onPressed: () {
-//                    print('_PlateNumberKeyboardState $v ');
-//                    results.clear();
-//                    addResult();
-//                  },
-//                  color: ColorT.backgroundColor,
-//                ),
-//              )
-//            :
-        Container(
-          width: MediaQuery.of(context).size.width / 12,
-          height: MediaQuery.of(context).size.width / 9,
-          margin: const EdgeInsets.only(top: 5),
-          child: RaisedButton(
-            padding: const EdgeInsets.all(5),
-            child: Text(
-              v,
-              style: TextStyle(fontSize: 20.0),
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(6.0)),
-            ),
-            onPressed: () {
-              print('_PlateNumberKeyboardState $v ');
-              results.add(v);
-              addResult();
-              setState(() {
-                numberTextList.clear();
-                widget.keyboardType = KeyboardType.number;
-              });
-            },
-            color: Colors.white,
-          ),
-        ),
+        buildAreaContainer(v),
       );
     });
   }
@@ -188,97 +151,128 @@ class _PlateNumberKeyboardState extends State<PlateNumberKeyboard>
     numberList.asMap().forEach((k, v) {
       return numberTextList.add(
         k == numberList.length - 1
-            ? Container(
-                width: MediaQuery.of(context).size.width / 6,
-                height: MediaQuery.of(context).size.width / 9,
-                margin: const EdgeInsets.only(top: 5),
-                child: RaisedButton(
-                  padding: const EdgeInsets.all(5),
-                  child: Icon(Icons.delete_forever),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                  ),
-                  onPressed: () {
-                    results.remove(results.last);
-                    print('_PlateNumberKeyboardState ${results.toString()} ');
-                    if (results.length == 0) {
-                      setState(() {
-                        areaTextList.clear();
-                        widget.keyboardType = KeyboardType.area;
-                      });
-                      results.clear();
-                    }
-                    addResult();
-                  },
-                  color: Colors.white,
-                ),
-              )
-            : Container(
-                width: MediaQuery.of(context).size.width / 12,
-                height: MediaQuery.of(context).size.width / 9,
-                margin: const EdgeInsets.only(top: 5),
-                child: (v.contains('I') || v.contains('O')
-                    ? RaisedButton(
-                        padding: const EdgeInsets.all(5),
-                        child: Text(
-                          v,
-                          style: TextStyle(fontSize: 20.0),
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                        ),
-                      )
-                    : RaisedButton(
-                        padding: const EdgeInsets.all(5),
-                        child: Text(
-                          v,
-                          style: TextStyle(fontSize: 20.0),
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                        ),
-                        onPressed: () {
-                          print('_PlateNumberKeyboardState $v ');
-                          if (results.length < 7) {
-                            results.add(v);
-                          }
-                          addResult();
-                        },
-                        color: Colors.white,
-                      )),
-              ),
+            ? buildNumberDeleteContainer()
+            : buildNumberContainer(v),
       );
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    widget.keyboardType == KeyboardType.area
+    _baseWidth = MediaQuery.of(context).size.width / 12;
+    _baseHeight = MediaQuery.of(context).size.width / 9;
+
+    _deleteWidth = MediaQuery.of(context).size.width / 6;
+    _deleteHeight = MediaQuery.of(context).size.width / 9;
+
+    _keyboardType == KeyboardType.area
         ? _getAreaKeyboard()
         : _getNumberKeyboard();
 
-    return widget.keyboardType == KeyboardType.area
-        ? Container(
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.only(bottom: 5),
-            color: Color(0xFFB3B3B3),
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              runAlignment: WrapAlignment.center,
-              children: areaTextList,
-              spacing: 5.0,
-            ),
-          )
-        : Container(
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.only(bottom: 5),
-            color: Color(0xFFB3B3B3),
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              runAlignment: WrapAlignment.center,
-              children: numberTextList,
-              spacing: 5.0,
-            ),
-          );
+    return Container(
+      width: _baseWidth * 12,
+      padding: const EdgeInsets.only(bottom: 5),
+      color: Color(0xFFB3B3B3),
+      child: Wrap(
+        alignment: WrapAlignment.center,
+        runAlignment: WrapAlignment.center,
+        children:
+            _keyboardType == KeyboardType.area ? areaTextList : numberTextList,
+        spacing: 5.0,
+      ),
+    );
+  }
+
+  Widget buildAreaContainer(String v) {
+    return Container(
+      width: _baseWidth,
+      height: _baseHeight,
+      margin: const EdgeInsets.only(top: 5),
+      child: RaisedButton(
+        padding: const EdgeInsets.all(5),
+        child: Text(
+          v,
+          style: TextStyle(fontSize: 20.0),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(6.0)),
+        ),
+        onPressed: () {
+          print('_PlateNumberKeyboardState $v ');
+          _results.add(v);
+          addResult();
+          setState(() {
+            numberTextList.clear();
+            _keyboardType = KeyboardType.number;
+          });
+        },
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget buildNumberDeleteContainer() {
+    return Container(
+      width: _deleteWidth,
+      height: _deleteHeight,
+      margin: const EdgeInsets.only(top: 5),
+      child: RaisedButton(
+        padding: const EdgeInsets.all(5),
+        child: Icon(Icons.delete_forever),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(6.0)),
+        ),
+        onPressed: () {
+          _results.remove(_results.last);
+          print('_PlateNumberKeyboardState ${_results.toString()} ');
+          if (_results.length == 0) {
+            setState(() {
+              areaTextList.clear();
+              _keyboardType = KeyboardType.area;
+            });
+            _results.clear();
+          }
+          addResult();
+        },
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget buildNumberContainer(String v) {
+    return Container(
+      width: _baseWidth,
+      height: _baseHeight,
+      margin: const EdgeInsets.only(top: 5),
+      child: (v.contains('I') || v.contains('O')
+          ? RaisedButton(
+              padding: const EdgeInsets.all(5),
+              child: Text(
+                v,
+                style: TextStyle(fontSize: 20.0),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(6.0)),
+              ),
+            )
+          : RaisedButton(
+              padding: const EdgeInsets.all(5),
+              child: Text(
+                v,
+                style: TextStyle(fontSize: 20.0),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(6.0)),
+              ),
+              onPressed: () {
+                print('_PlateNumberKeyboardState $v ');
+                if (_results.length < 7) {
+                  _results.add(v);
+                }
+                addResult();
+              },
+              color: Colors.white,
+            )),
+    );
   }
 }

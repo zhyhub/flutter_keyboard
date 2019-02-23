@@ -23,7 +23,7 @@ class Test extends StatefulWidget {
 }
 
 class _TestState extends State<Test> with SingleTickerProviderStateMixin {
-  List<String> _results = List();
+  List<String> resultList = List();
   String str;
 
   @override
@@ -50,7 +50,7 @@ class _TestState extends State<Test> with SingleTickerProviderStateMixin {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(_results.toString()),
+              Text(resultList.toString()),
               Container(
                 height: 50,
               ),
@@ -61,8 +61,8 @@ class _TestState extends State<Test> with SingleTickerProviderStateMixin {
                       context: context,
                       builder: (_) {
                         return PlateNumberKeyboard(
-                          keyboardType: KeyboardType.area,
-                          callback: (val) => onDataChange(val),
+                          backResult: (val) => onDataChange(val),
+                          results: resultList,
                         );
                       });
                 },
@@ -76,8 +76,8 @@ class _TestState extends State<Test> with SingleTickerProviderStateMixin {
 
   onDataChange(List<String> results) {
     setState(() {
-      _results = results;
-      print('onDataChange =======  $_results');
+      resultList = results;
+      print('onDataChange =======  $resultList');
     });
   }
 }
