@@ -57,14 +57,8 @@ class _TestState extends State<Test> with SingleTickerProviderStateMixin {
               InkWell(
                 child: Text("点我！！！！！！"),
                 onTap: () {
-                  showBottomSheet(
-                      context: context,
-                      builder: (_) {
-                        return PlateNumberKeyboard(
-                          backResult: (val) => onDataChange(val),
-                          results: resultList,
-                        );
-                      });
+                  PlateNumberKeyboard.showKeyboard(context, resultList,
+                      (results) => onResultController(results));
                 },
               ),
             ],
@@ -74,7 +68,7 @@ class _TestState extends State<Test> with SingleTickerProviderStateMixin {
     );
   }
 
-  onDataChange(List<String> results) {
+  onResultController(List<String> results) {
     setState(() {
       resultList = results;
       print('onDataChange =======  $resultList');

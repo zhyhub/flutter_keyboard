@@ -90,15 +90,27 @@ class PlateNumberKeyboard extends StatefulWidget {
   PlateNumberKeyboard({
     Key key,
     @required this.results,
-    this.backResult,
+    this.onResultController,
   }) : super(key: key);
 
   final List<String> results;
 
-  final backResult;
+  final onResultController;
 
   @override
   _PlateNumberKeyboardState createState() => _PlateNumberKeyboardState();
+
+  static void showKeyboard(BuildContext context, List<String> resultList,
+      onResultController(List<String> results)) {
+    showBottomSheet(
+        context: context,
+        builder: (_) {
+          return PlateNumberKeyboard(
+            results: resultList,
+            onResultController: onResultController,
+          );
+        });
+  }
 }
 
 class _PlateNumberKeyboardState extends State<PlateNumberKeyboard>
@@ -113,7 +125,7 @@ class _PlateNumberKeyboardState extends State<PlateNumberKeyboard>
 
   void addResult() {
     if (_results.length < 8) {
-      widget.backResult(_results);
+      widget.onResultController(_results);
     }
   }
 
@@ -124,11 +136,6 @@ class _PlateNumberKeyboardState extends State<PlateNumberKeyboard>
     numberTextList.clear();
     _results = widget.results;
     _keyboardType = KeyboardType.area;
-  }
-
-  @override
-  void didUpdateWidget(PlateNumberKeyboard oldWidget) {
-    super.didUpdateWidget(oldWidget);
   }
 
   @override
