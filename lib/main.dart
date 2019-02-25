@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard/plate_number_widget.dart';
+import 'package:flutter_keyboard/test/sushi_plates_widget.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,9 +23,6 @@ class Test extends StatefulWidget {
 }
 
 class _TestState extends State<Test> with SingleTickerProviderStateMixin {
-  List<String> resultList = List();
-  String str;
-
   @override
   void initState() {
     super.initState();
@@ -44,34 +41,15 @@ class _TestState extends State<Test> with SingleTickerProviderStateMixin {
         elevation: 1.0,
         backgroundColor: Color(0xFF1F1F25),
       ),
-      body: Builder(builder: (BuildContext context) {
-        return Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(resultList.toString()),
-              Container(
-                height: 50,
-              ),
-              InkWell(
-                child: Text("点我！！！！！！"),
-                onTap: () {
-                  PlateNumberKeyboard.showKeyboard(context, resultList,
-                      (results) => onResultController(results));
-                },
-              ),
-            ],
-          ),
-        );
-      }),
+      body: Center(
+        child: FlatButton(
+            color: Colors.greenAccent,
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SushiPlatesWidget()));
+            },
+            child: Text('车牌键盘')),
+      ),
     );
-  }
-
-  onResultController(List<String> results) {
-    setState(() {
-      resultList = results;
-      print('onDataChange =======  $resultList');
-    });
   }
 }
