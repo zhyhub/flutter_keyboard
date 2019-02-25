@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard/keyboard/sushi_input_widget.dart';
 import 'package:flutter_keyboard/keyboard/sushi_keyboard_widget.dart';
 
 class SushiPlatesWidget extends StatefulWidget {
@@ -56,7 +57,6 @@ class _SushiPlatesWidgetState extends State<SushiPlatesWidget> {
       }
       setState(() {});
     }
-
     setState(() {});
   }
 
@@ -86,24 +86,18 @@ class _SushiPlatesWidgetState extends State<SushiPlatesWidget> {
   }
 
   Widget _buildText(List<String> list) {
-    return Center(
-        child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(list.toString()),
-        Container(
-          height: 50,
-        ),
-        InkWell(
-          child: Text("点我！！！！！！"),
-          onTap: () {
-            if (_showBottomSheetCallback != null) {
-              _showBottomSheetCallback();
-            }
-          },
-        ),
-      ],
-    ));
+    return GestureDetector(
+      child: Container(
+        child: SushiInputWidget(_text),
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.width,
+        margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
+      ),
+      onTap: () {
+        if (_showBottomSheetCallback != null) {
+          _showBottomSheetCallback();
+        }
+      },
+    );
   }
 }

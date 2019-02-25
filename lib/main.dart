@@ -43,12 +43,15 @@ class _TestState extends State<Test> with SingleTickerProviderStateMixin {
       ),
       body: Center(
         child: FlatButton(
-            color: Colors.greenAccent,
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SushiPlatesWidget()));
-            },
-            child: Text('车牌键盘')),
+          color: Colors.greenAccent,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SushiPlatesWidget()),
+            );
+          },
+          child: Text('车牌键盘'),
+        ),
       ),
     );
   }
