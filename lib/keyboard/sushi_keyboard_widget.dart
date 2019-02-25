@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard/test/sushi_keyboard_button.dart';
+import 'package:flutter_keyboard/keyboard/sushi_keyboard_button.dart';
 
 class KeyEvent {
   String key;

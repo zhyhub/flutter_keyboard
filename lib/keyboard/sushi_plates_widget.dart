@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard/test/sushi_keyboard_widget.dart';
+import 'package:flutter_keyboard/keyboard/sushi_keyboard_widget.dart';
 
 class SushiPlatesWidget extends StatefulWidget {
   @override

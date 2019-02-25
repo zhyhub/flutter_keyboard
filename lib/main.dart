@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard/test/sushi_plates_widget.dart';
+import 'package:flutter_keyboard/keyboard/sushi_plates_widget.dart';
 
 void main() => runApp(MyApp());
 
