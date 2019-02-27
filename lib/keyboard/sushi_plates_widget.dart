@@ -90,7 +90,7 @@ class _SushiPlatesWidgetState extends State<SushiPlatesWidget> {
       child: Container(
         child: SushiInputWidget(_text),
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.width / 14,
         margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
       ),
       onTap: () {
